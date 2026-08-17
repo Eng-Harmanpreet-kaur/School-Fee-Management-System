@@ -51,6 +51,7 @@ private:
     void getdata(){
         cout<<"Enter receipt number: ";
         cin>>receiptno;
+        
         cout<<"Enter student id: ";
         cin>>stuid;
         cout<<"Enter amount paid: ";
@@ -63,14 +64,14 @@ private:
         cout<<"Enter remark: ";
         cin.getline(remark, 40);  
     }
-    void displaydata(){
-        cout<<"Receipt number: "<<receiptno<<endl;
-        cout<<"Student id: "<<stuid<<endl;
-        cout<<"Amount paid: "<<amountpaid<<endl;
-        cout<<"Payment date: "<<pDate<<endl;
-        cout<<"Payment mode: "<<mode<<endl;
-        cout<<"Remark: "<<remark<<endl;
-    }
+    // void displaydata(){
+    //     cout<<"Receipt number: "<<receiptno<<endl;
+    //     cout<<"Student id: "<<stuid<<endl;
+    //     cout<<"Amount paid: "<<amountpaid<<endl;
+    //     cout<<"Payment date: "<<pDate<<endl;
+    //     cout<<"Payment mode: "<<mode<<endl;
+    //     cout<<"Remark: "<<remark<<endl;
+    // }
 
 };
 int main(){
