@@ -80,15 +80,7 @@ int main(){
     feepay f;
     ofstream fout;
     ifstream fin;
-    // fout.open("student.txt",ios::app);
-    // s.getdata();
-    // fout.write((char*)&s,sizeof(s));
-    // fout.close();
-    // fout.open("feepay.txt",ios::app);
-    // f.getdata();
-    // fout.write((char*)&f,sizeof(f));
-    // fout.close();
-    // fout.open("student.txt",ios::in);
+    
     fin.open("student.txt",ios::in);
     while(fin.read((char*)&s,sizeof(s))){
         s.displaydata();
