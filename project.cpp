@@ -81,10 +81,10 @@ int main(){
     ofstream fout;
     ifstream fin;
     
-    fin.open("student.txt",ios::in);
-    while(fin.read((char*)&s,sizeof(s))){
-        s.displaydata();
-    }
+    // fin.open("student.txt",ios::in);
+    // while(fin.read((char*)&s,sizeof(s))){
+    //     s.displaydata();
+    // }
     fin.close();
 
     return 0;
