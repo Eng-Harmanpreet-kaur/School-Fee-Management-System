@@ -22,7 +22,7 @@ public:
     void deleteStudent();
 };
 void Student::addStudent(){
-    ofstream outFile("students.txt", ios::binary | ios::app);
+    ofstream outFile("students.txt", ios::app);
     if (!outFile)
     {
         cout << "Error opening file!" << endl;
@@ -43,12 +43,17 @@ void Student::addStudent(){
     cout << "Enter Total Fee Due: ";
     cin >> totalFeeDue;
 
-    outFile.write(reinterpret_cast<char*>(this), sizeof(Student));
+    outFile << studentID << endl;
+    outFile << name << endl;
+    outFile << className << endl;
+    outFile << section << endl;
+    outFile << contactNo << endl;
+    outFile << totalFeeDue << endl;
     outFile.close();
 }
 
 void Student::displayStudent(){
-    ifstream inFile("students.txt", ios::binary);
+    ifstream inFile("students.txt");
     if (!inFile)
     {
         cout << "Error opening file!" << endl;
@@ -56,17 +61,37 @@ void Student::displayStudent(){
     }
 
     cout << "Student Records:" << endl;
-    while (inFile.read(reinterpret_cast<char*>(this), sizeof(Student)))
+    Student temp;
+    bool found = false;
+      while (inFile >> temp.studentID)
     {
-        cout << "Student ID: " << studentID << endl;
-        cout << "Name: " << name << endl;
-        cout << "Class Name: " << className << endl;
-        cout << "Section: " << section << endl;
-        cout << "Contact Number: " << contactNo << endl;
-        cout << "Total Fee Due: " << totalFeeDue << endl;
-        cout << "------------------------" << endl;
+        inFile.ignore();
+
+        getline(inFile, temp.name);
+        getline(inFile, temp.className);
+        getline(inFile, temp.section);
+        getline(inFile, temp.contactNo);
+
+        inFile >> temp.totalFeeDue;
+        inFile.ignore();
+
+        cout << "\nStudent ID: " << temp.studentID << endl;
+        cout << "Name: " << temp.name << endl;
+        cout << "Class Name: " << temp.className << endl;
+        cout << "Section: " << temp.section << endl;
+        cout << "Contact Number: " << temp.contactNo << endl;
+        cout << "Total Fee Due: " << temp.totalFeeDue << endl;
+
+        cout << "------------------------------------" << endl;
+        found = true;
     }
+    if (!found)
+    {
+        cout << "No student records found." << endl;
+    }
+
     inFile.close();
+   
 }
 
 void Student::searchStudent(){
@@ -74,7 +99,7 @@ void Student::searchStudent(){
     cout << "Enter Student ID to search: ";
     cin >> searchID;
 
-    ifstream inFile("students.txt", ios::binary);
+    ifstream inFile("students.txt");
     if (!inFile)
     {
         cout << "Error opening file!" << endl;
@@ -82,17 +107,33 @@ void Student::searchStudent(){
     }
 
     bool found = false;
-    while (inFile.read(reinterpret_cast<char*>(this), sizeof(Student)))
+    Student temp;
+   while (inFile >> temp.studentID)
     {
-        if (studentID == searchID)
+        inFile.ignore();
+
+        getline(inFile, temp.name);
+        getline(inFile, temp.className);
+        getline(inFile, temp.section);
+        getline(inFile, temp.contactNo);
+
+        inFile >> temp.totalFeeDue;
+        inFile.ignore();
+
+        if (temp.studentID == searchID)
         {
-            cout << "Student Found:" << endl;
-            cout << "Student ID: " << studentID << endl;
-            cout << "Name: " << name << endl;
-            cout << "Class Name: " << className << endl;
-            cout << "Section: " << section << endl;
-            cout << "Contact Number: " << contactNo << endl;
-            cout << "Total Fee Due: " << totalFeeDue << endl;
+            cout << "\nStudent Found!" << endl;
+            cout << "-----------------------------" << endl;
+
+            cout << "Student ID: " << temp.studentID << endl;
+            cout << "Name: " << temp.name << endl;
+            cout << "Class Name: " << temp.className << endl;
+            cout << "Section: " << temp.section << endl;
+            cout << "Contact Number: " << temp.contactNo << endl;
+            cout << "Total Fee Due: " << temp.totalFeeDue << endl;
+
+            cout << "-----------------------------" << endl;
+
             found = true;
             break;
         }
@@ -103,105 +144,23 @@ void Student::searchStudent(){
     }
     inFile.close();
 }
-
-void Student::updateStudent(){
+void Student::updateStudent()
+{
     int updateID;
+
     cout << "Enter Student ID to update: ";
     cin >> updateID;
 
-    fstream file("students.txt", ios::binary | ios::in | ios::out);
-    if (!file)
-    {
-        cout << "Error opening file!" << endl;
-        return;
-    }
+    ifstream inFile("students.txt");
 
-   bool found = false;
-    while (file.read(reinterpret_cast<char*>(this), sizeof(Student)))
-    {
-        if (studentID == updateID)
-       { found =true;
-       }
-int choice;
-
-      do  {
-        cout <<"1 Student ID\n";
-        cout<<"2 Name\n";
-        cout<<"3 Class";
-        cout<<"4 Section";
-        cout<<"5 Contact No";
-        cout<<"6 Due Fee";
-        cout <<"7 Exit";
-
-        cout<<"Enter you choice that you want to update";
-        cin>>choice;
-
-        switch (choice)
-        {
-        case 1:
-        cout<<"Enter your Student Id";
-        cin>>studentID;
-        break;
-        case 2:
-        cout << "Enter new Name: ";
-            cin.ignore();
-            getline(cin, name);
-         break;
-        case 3:
-         cout << "Enter new Class Name: ";
-        getline(cin, className);
-         break;
-        case 4:
-         cout << "Enter new Section: ";
-            getline(cin, section);
-         break;
-        case 5: 
-         cout << "Enter new Contact Number: ";
-        getline(cin, contactNo);
-        
-         break;
-        case 6:
-        cout << "Enter new Total Fee Due: ";
-            cin >> totalFeeDue;
-         break;
-       case 7:
-       break;
-           
-        default:
-        cout << "Student with ID " << updateID << " not found." << endl;
-            break;
-        }}
-        while (choice != 7);
-           
-          
-            file.seekp(-static_cast<int>(sizeof(Student)), ios::cur);
-            file.write(reinterpret_cast<char*>(this), sizeof(Student));
-            // found = true;
-            cout << "Student record updated successfully." << endl;
-            break;
-        
-        
-    }
-    if (!found)
-    {
-        cout << "Student with ID " << updateID << " not found." << endl;
-    }
-    file.close();
-}
-
-void Student:: deleteStudent(){
-    int deleteID;
-    cout << "Enter Student ID to delete: ";
-    cin >> deleteID;
-
-    ifstream inFile("students.txt", ios::binary);
     if (!inFile)
     {
         cout << "Error opening file!" << endl;
         return;
     }
 
-    ofstream tempFile("students.tmp", ios::binary);
+    ofstream tempFile("temp.txt");
+
     if (!tempFile)
     {
         cout << "Error creating temporary file!" << endl;
@@ -209,35 +168,143 @@ void Student:: deleteStudent(){
     }
 
     bool found = false;
-    Student record;
-    while (inFile.read(reinterpret_cast<char*>(&record), sizeof(Student)))
+    Student temp;
+
+    while (inFile >> temp.studentID)
     {
-        if (record.studentID == deleteID)
+        inFile.ignore();
+
+        getline(inFile, temp.name);
+        getline(inFile, temp.className);
+        getline(inFile, temp.section);
+        getline(inFile, temp.contactNo);
+
+        inFile >> temp.totalFeeDue;
+        inFile.ignore();
+
+        if (temp.studentID == updateID)
         {
             found = true;
+
+            cout << "\nStudent Found!" << endl;
+            cout << "Enter new details:" << endl;
+
+            cout << "Enter Student ID: ";
+            cin >> temp.studentID;
+            cin.ignore();
+
+            cout << "Enter Name: ";
+            getline(cin, temp.name);
+
+            cout << "Enter Class Name: ";
+            getline(cin, temp.className);
+
+            cout << "Enter Section: ";
+            getline(cin, temp.section);
+
+            cout << "Enter Contact Number: ";
+            getline(cin, temp.contactNo);
+
+            cout << "Enter Total Fee Due: ";
+            cin >> temp.totalFeeDue;
         }
-        else
-        {
-            tempFile.write(reinterpret_cast<char*>(&record), sizeof(Student));
-        }
+
+        // Write record to temporary file
+        tempFile << temp.studentID << endl;
+        tempFile << temp.name << endl;
+        tempFile << temp.className << endl;
+        tempFile << temp.section << endl;
+        tempFile << temp.contactNo << endl;
+        tempFile << temp.totalFeeDue << endl;
     }
 
     inFile.close();
     tempFile.close();
 
     remove("students.txt");
-    rename("students.tmp", "students.txt");
+    rename("temp.txt", "students.txt");
 
     if (found)
     {
-        cout << "Student record deleted successfully." << endl;
+        cout << "\nStudent record updated successfully." << endl;
     }
     else
     {
-        cout << "Student with ID " << deleteID << " not found." << endl;
+        cout << "\nStudent with ID " << updateID
+             << " not found." << endl;
     }
 }
+void Student::deleteStudent()
+{
+    int deleteID;
 
+    cout << "Enter Student ID to delete: ";
+    cin >> deleteID;
+
+    ifstream inFile("students.txt");
+
+    if (!inFile)
+    {
+        cout << "Error opening file!" << endl;
+        return;
+    }
+
+    ofstream tempFile("temp.txt");
+
+    if (!tempFile)
+    {
+        cout << "Error creating temporary file!" << endl;
+        return;
+    }
+
+    bool found = false;
+    Student temp;
+
+    while (inFile >> temp.studentID)
+    {
+        inFile.ignore();
+
+        getline(inFile, temp.name);
+        getline(inFile, temp.className);
+        getline(inFile, temp.section);
+        getline(inFile, temp.contactNo);
+
+        inFile >> temp.totalFeeDue;
+        inFile.ignore();
+
+        if (temp.studentID == deleteID)
+        {
+            found = true;
+
+            // Do not write this student
+            continue;
+        }
+
+        // Write other students
+        tempFile << temp.studentID << endl;
+        tempFile << temp.name << endl;
+        tempFile << temp.className << endl;
+        tempFile << temp.section << endl;
+        tempFile << temp.contactNo << endl;
+        tempFile << temp.totalFeeDue << endl;
+    }
+
+    inFile.close();
+    tempFile.close();
+
+    remove("students.txt");
+    rename("temp.txt", "students.txt");
+
+    if (found)
+    {
+        cout << "\nStudent record deleted successfully." << endl;
+    }
+    else
+    {
+        cout << "\nStudent with ID " << deleteID
+             << " not found." << endl;
+    }
+}
 
 int main()
 {
