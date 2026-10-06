@@ -2,6 +2,7 @@
 #include<fstream>
 #include<string>
 using namespace std;
+
 class Student
 {
 private:
@@ -21,8 +22,10 @@ public:
     void updateStudent();
     void deleteStudent();
 };
+
 void Student::addStudent(){
     ofstream outFile("students.txt", ios::app);
+
     if (!outFile)
     {
         cout << "Error opening file!" << endl;
@@ -32,14 +35,19 @@ void Student::addStudent(){
     cout << "Enter Student ID: ";
     cin >> studentID;
     cin.ignore();
+
     cout << "Enter Name: ";
     getline(cin, name);
+
     cout << "Enter Class Name: ";
     getline(cin, className);
+
     cout << "Enter Section: ";
     getline(cin, section);
+
     cout << "Enter Contact Number: ";
     getline(cin, contactNo);
+
     cout << "Enter Total Fee Due: ";
     cin >> totalFeeDue;
 
@@ -49,11 +57,13 @@ void Student::addStudent(){
     outFile << section << endl;
     outFile << contactNo << endl;
     outFile << totalFeeDue << endl;
+
     outFile.close();
 }
 
 void Student::displayStudent(){
     ifstream inFile("students.txt");
+
     if (!inFile)
     {
         cout << "Error opening file!" << endl;
@@ -61,9 +71,11 @@ void Student::displayStudent(){
     }
 
     cout << "Student Records:" << endl;
+
     Student temp;
     bool found = false;
-      while (inFile >> temp.studentID)
+
+    while (inFile >> temp.studentID)
     {
         inFile.ignore();
 
@@ -83,23 +95,26 @@ void Student::displayStudent(){
         cout << "Total Fee Due: " << temp.totalFeeDue << endl;
 
         cout << "------------------------------------" << endl;
+
         found = true;
     }
+
     if (!found)
     {
         cout << "No student records found." << endl;
     }
 
     inFile.close();
-   
 }
 
 void Student::searchStudent(){
     int searchID;
+
     cout << "Enter Student ID to search: ";
     cin >> searchID;
 
     ifstream inFile("students.txt");
+
     if (!inFile)
     {
         cout << "Error opening file!" << endl;
@@ -108,7 +123,8 @@ void Student::searchStudent(){
 
     bool found = false;
     Student temp;
-   while (inFile >> temp.studentID)
+
+    while (inFile >> temp.studentID)
     {
         inFile.ignore();
 
@@ -138,15 +154,19 @@ void Student::searchStudent(){
             break;
         }
     }
+
     if (!found)
     {
         cout << "Student with ID " << searchID << " not found." << endl;
     }
+
     inFile.close();
 }
+
 void Student::updateStudent()
 {
     int updateID;
+    int choice;
 
     cout << "Enter Student ID to update: ";
     cin >> updateID;
@@ -164,6 +184,7 @@ void Student::updateStudent()
     if (!tempFile)
     {
         cout << "Error creating temporary file!" << endl;
+        inFile.close();
         return;
     }
 
@@ -187,29 +208,50 @@ void Student::updateStudent()
             found = true;
 
             cout << "\nStudent Found!" << endl;
-            cout << "Enter new details:" << endl;
 
-            cout << "Enter Student ID: ";
-            cin >> temp.studentID;
+            cout << "1. Update Name" << endl;
+            cout << "2. Update Class Name" << endl;
+            cout << "3. Update Section" << endl;
+            cout << "4. Update Contact Number" << endl;
+            cout << "5. Update Total Fee Due" << endl;
+
+            cout << "Enter your choice: ";
+            cin >> choice;
             cin.ignore();
 
-            cout << "Enter Name: ";
-            getline(cin, temp.name);
+            switch (choice)
+            {
+            case 1:
+                cout << "Enter New Name: ";
+                getline(cin, temp.name);
+                break;
 
-            cout << "Enter Class Name: ";
-            getline(cin, temp.className);
+            case 2:
+                cout << "Enter New Class Name: ";
+                getline(cin, temp.className);
+                break;
 
-            cout << "Enter Section: ";
-            getline(cin, temp.section);
+            case 3:
+                cout << "Enter New Section: ";
+                getline(cin, temp.section);
+                break;
 
-            cout << "Enter Contact Number: ";
-            getline(cin, temp.contactNo);
+            case 4:
+                cout << "Enter New Contact Number: ";
+                getline(cin, temp.contactNo);
+                break;
 
-            cout << "Enter Total Fee Due: ";
-            cin >> temp.totalFeeDue;
+            case 5:
+                cout << "Enter New Total Fee Due: ";
+                cin >> temp.totalFeeDue;
+                cin.ignore();
+                break;
+
+            default:
+                cout << "Invalid choice!" << endl;
+            }
         }
 
-        // Write record to temporary file
         tempFile << temp.studentID << endl;
         tempFile << temp.name << endl;
         tempFile << temp.className << endl;
@@ -234,6 +276,7 @@ void Student::updateStudent()
              << " not found." << endl;
     }
 }
+
 void Student::deleteStudent()
 {
     int deleteID;
@@ -320,6 +363,7 @@ int main()
         cout << "4. Update Student" << endl;
         cout << "5. Delete Student" << endl;
         cout << "6. Exit" << endl;
+
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -328,26 +372,32 @@ int main()
         case 1:
             student.addStudent();
             break;
+
         case 2:
             student.displayStudent();
             break;
+
         case 3:
             student.searchStudent();
             break;
+
         case 4:
             student.updateStudent();
             break;
+
         case 5:
             student.deleteStudent();
             break;
+
         case 6:
             cout << "Exiting..." << endl;
             break;
+
         default:
             cout << "Invalid choice! Please try again." << endl;
         }
-    } while (choice != 6);
 
+    } while (choice != 6);
 
     return 0;
 }
