@@ -17,9 +17,10 @@ private:
 public:
     void add();
     void display();
-     void search();
+    void search();
     void update();
-     void del();
+    void del();
+    void display1();
 };
 void student::add()
 {
@@ -253,23 +254,95 @@ void student:: del(){
 
 
 }
+void student::display1()
+{
+    fstream fs;
+    fs.open("student.dat", ios::in | ios::binary);
+    if (!fs)
+    {
+        cout << "file not found";
+        exit(0);
+    }
+    int sid;
+    cout << "Enter student id to display : ";
+    cin >> sid;
+    bool found = false;
+    while (fs.read((char *)this, sizeof(student)))
+    {
+        if (stu_id == sid)
+        {
+            cout << "-----------------------------" << endl;
+            cout << "Student id " << stu_id << endl;
+            cout << "Student name " << name << endl;
+            cout << "Class name " << classsname << endl;
+            cout << "Section " << section << endl;
+            cout << "Father's name " << fathername << endl;
+            cout << "Contact number " << contactno << endl;
+            cout << "Total fee paid " << totalfee << endl;
+            cout<<"-----------------------------"<<endl;
+            found = true;
+            break;
+        }
+    }
+    if (!found)
+    {
+        cout << " Student not found" << endl;
+    }
+    fs.close();
+}
 
 int main()
 {
     cout << " ---STUDENT MANAGEMENT SYSTEM---" << endl;
     student s;
     fstream f;
-
+    int position;
+    cout<<"Enter your position : ";
+    cout<<"\n1.Teacher \n2. Student"<<endl;
+    cin >> position;
+    int ch;
+    if (position == 1){
+        do
+        {
+            cout<<"-----------------------------"<<endl;
+            cout << "\n1. Display single student ";
+            cout << "\n2. Search student ";
+            cout << "\n3. Exit" << endl;
+            cout << "MAKE CHOICE : ";
+            cin >> ch;
+            switch (ch)
+            {
+            case 1:
+                s.display1();
+                break;
+            case 2:
+                s.search();
+                break;
+            case 3:
+                exit(0);
+            default:
+                cout << "Invalid Choice" << endl;
+            }
+        }while(ch != 3);
+    }
+    
     int choice;
+    if (position == 2){
+        cout<<"-----------------------------"<<endl;
+        int code;
+        cout << "if you are Teacher, Enter code ";
+        cin >> code;
+        if (code == 1234){
     do
     {   cout<<"-----------------------------"<<endl;
-        cout << "1. Add student "
-             << "\n2. Display all student "
-             << "\n3. Search student "
-             << "\n4. Update student "
-             << "\n5. Delete student "
-             << "\n6. Exit" << endl;
-             cout<< "MAKE CHOICE : ";
+        cout << "1. Add student ";
+        cout << "\n2. Display single student ";
+        cout << "\n3. Display all student ";
+        cout << "\n4. Search student ";
+        cout << "\n5. Update student ";
+        cout << "\n6. Delete student ";
+        cout << "\n7. Exit" << endl;
+        cout << "MAKE CHOICE : ";
         cin >> choice;
         switch (choice)
         {
@@ -277,21 +350,30 @@ int main()
             s.add();
             break;
         case 2:
-            s.display();
+            s.display1();
             break;
         case 3:
-            s.search();
+            s.display();
             break;
         case 4:
-            s.update();
+            s.search();
             break;
         case 5:
+            s.update();
+            break; 
+        case 6:
             s.del();
             break;
-        case 6:
-            exit(0);
-        default:
+        case 7:
+            exit;
+            break;
+            default:
             cout << " Invalid Choice ";
         }
-    } while (choice != 6);
+    }  while (choice != 7);
+}
+else{
+    cout<<"Invalid code"<<endl;
+}
+}
 }
