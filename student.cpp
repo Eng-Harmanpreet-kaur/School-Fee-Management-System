@@ -147,8 +147,14 @@ void student:: del(){
     }
     int choice,sid;
     cout<<" 1. Delete all \n 2. Delete by id \n Enter your choice : ";
-    cin>>choice
+    cin>>choice;
     if(choice==1){
+        fd.close();
+        remove("student.dat");
+        cout<<"ALL DELETED SUCCESSFULLY"<<endl;
+        exit(0);
+    }
+    else if(choice==2){
         
     }
 }
@@ -156,8 +162,6 @@ int main()
 {
     cout << " ---STUDENT MANAGEMENT SYSTEM---" << endl;
     student s;
-    fstream f;
-
     int choice;
     do
     {   cout<<"-----------------------------"<<endl;
