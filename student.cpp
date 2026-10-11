@@ -109,41 +109,77 @@ void student::search()
     }
     fs.close();
 }
-void student::update()
-{
-    ifstream fu;
-    fu.open("student.dat", ios::in | ios::binary);
-    if (!fu)
-    {
-        cout << "File not found";
+void student:: update(){
+    fstream fu;
+    fu.open("student.dat",ios::in|ios::out|ios::binary);
+    if(!fu){
+        cout<<"File not found";
         exit(0);
     }
-    cout << "Enter student id to update : ";
+    cout<<"Enter student id to update : ";
     int sid;
-    cin >> sid;
-    while (fu.read((char *)this, sizeof(student)))
-    {
-        if (stu_id == sid)
-        {
-            cout << "-----------------------------" << endl;
-            cout << "Enter new name : ";
-            cin.ignore();
-            cin.getline(name, 50);
-            cout << "Enter new class name : ";
-            cin.getline(classsname, 20);
-            cout << "Enter new section : ";
-            cin.getline(section, 5);
-            cout << "Enter new father's name : ";
-            cin.getline(fathername, 30);
-            cout << "Enter new contact number : ";
-            cin.getline(contactno, 15);
-            cout << "UPDATE SUCCESSFUL" << endl;
-            cout << "-----------------------------" << endl;
+    cin>>sid;
+    bool found=false;
+    int choice;
+    while(fu.read((char*)this,sizeof(student))){
+        if(stu_id==sid){
+            cout<<"-----------------------------"<<endl;
+            cout<<"1. Update name \n";
+            cout<<"2. Update class name \n";
+            cout<<"3. Update section \n";
+            cout<<"4. Update father's name \n";
+            cout<<"5. Update contact number"<<endl;
+            cout<<"------------------------------"<<endl;
+            cin >> choice;
+            switch (choice)
+    case 1:
+        cout << "Enter new name: ";
+        cin.ignore(); // Clear the input buffer before reading a new line
+        cin.getline(name, 50);
+        break;
+    case 2:
+        cout << "Enter new class name: ";
+        cin.ignore(); // Clear the input buffer before reading a new line
+        cin.getline(classsname, 20);
+        break;
+    case 3:
+        cout << "Enter new section: ";
+        cin.ignore(); 
+        cin.getline(section, 5);
+        break;
+    case 4:
+        cout << "Enter new father's name: ";
+        cin.ignore(); // Clear the input buffer before reading a new line
+        cin.getline(fathername, 30);
+        break;
+    case 5:
+        cout << "Enter new contact number: ";
+        cin.ignore(); // Clear the input buffer before reading a new line
+        cin.getline(contactno, 15);
+        break;
+    default:
+        cout << "Invalid choice!" << endl;
+}
+        bool wantToUpdate ;
+        cout<<"Do you want to make this change? (y/n): ";
+        cin>>wantToUpdate;
+        if(wantToUpdate){
+            fu.seekp(fu.tellg()-sizeof(student));
+            fu.write((char*)this,sizeof(student));
+            cout<<"UPDATE SUCCESSFUL"<<endl;
+            cout<<"-----------------------------"<<endl;
+        }
+        else{
+            cout<<"Update cancelled."<<endl;
+        }
+            found=true;
         }
     }
+     if(!found){
+            cout<<"Student not found"<<endl;
+        }
     fu.close();
-}
-void student::del()
+}void student::del()
 {
     fstream fd;
     fd.open("student.dat", ios::in | ios::out | ios::trunc);
