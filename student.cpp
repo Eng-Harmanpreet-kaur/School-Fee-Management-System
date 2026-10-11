@@ -316,7 +316,7 @@ int main()
 {
     cout << " ---STUDENT MANAGEMENT SYSTEM---" << endl;
     student s;
-    int choice, c;
+    int c;
     do
     {
         cout << "\tYour Role ? \n\t 1. Admin \n\t 2. Student \n\t 3. Exit ";
@@ -329,4 +329,5 @@ int main()
             stu();
         }
     }while (c!=3);
+    cout<<" EXIT SUCCESSFUL ";
 }
