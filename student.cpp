@@ -17,10 +17,10 @@ private:
 public:
     void add();
     void display();
-    void display1();
     void search();
     void update();
     void del();
+    void display1();
 };
 void student::add()
 {
@@ -41,26 +41,23 @@ void student::add()
     cin.ignore();
     cin.getline(name, 50);
     cout << "Enter class name :\n";
-<<<<<<< HEAD
     cin.ignore();
-=======
->>>>>>> b6893f23f88b5d8fe003f70cd106909baf4228c7
     cin.getline(classsname, 20);
     cout << "Enter section :\n";
+    cin.ignore();
     cin.getline(section, 5);
     cout << "Enter father's name :\n";
+    cin.ignore();
     cin.getline(fathername, 30);
     cout << "Enter contact number :\n";
+    cin.ignore();
     cin.getline(contactno, 15);
     cout << "Enter total fee paid :\n";
     cin >> totalfee;
-<<<<<<< HEAD
     if (cin.fail())
     {
         cout << "Invalid input! Please enter a float value.";
     }
-=======
->>>>>>> b6893f23f88b5d8fe003f70cd106909baf4228c7
     cout << "-----------------------------" << endl;
     f.write((char *)this, sizeof(student));
     f.close();
@@ -152,7 +149,6 @@ void student::update()
             cout << "------------------------------" << endl;
             cin >> choice;
             switch (choice)
-<<<<<<< HEAD
             {
             case 1:
                 cout << "Enter new name: ";
@@ -212,84 +208,34 @@ void student::update()
 
             found = true;
         }
-=======
-    case 1:
-        cout << "Enter new name: ";
-        cin.ignore(); // Clear the input buffer before reading a new line
-        cin.getline(name, 50);
-        break;
-    case 2:
-        cout << "Enter new class name: ";
-        cin.ignore(); // Clear the input buffer before reading a new line
-        cin.getline(classsname, 20);
-        break;
-    case 3:
-        cout << "Enter new section: ";
-        cin.ignore(); 
-        cin.getline(section, 5);
-        break;
-    case 4:
-        cout << "Enter new father's name: ";
-        cin.ignore(); // Clear the input buffer before reading a new line
-        cin.getline(fathername, 30);
-        break;
-    case 5:
-        cout << "Enter new contact number: ";
-        cin.ignore(); // Clear the input buffer before reading a new line
-        cin.getline(contactno, 15);
-        break;
-    default:
-        cout << "Invalid choice!" << endl;
-}
-        bool wantToUpdate ;
-        cout<<"Do you want to make this change? (y/n): ";
-        cin>>wantToUpdate;
-        if(wantToUpdate){
-            fu.seekp(fu.tellg()-sizeof(student));
-            fu.write((char*)this,sizeof(student));
-            cout<<"UPDATE SUCCESSFUL"<<endl;
-            cout<<"-----------------------------"<<endl;
-        }
-        else{
-            cout<<"Update cancelled."<<endl;
-        }
-            found=true;
-        }
->>>>>>> b6893f23f88b5d8fe003f70cd106909baf4228c7
     }
     if (!found)
     {
         cout << "Student not found" << endl;
     }
     fu.close();
-<<<<<<< HEAD
 }
 void student::del()
-=======
-}void student::del()
->>>>>>> b6893f23f88b5d8fe003f70cd106909baf4228c7
 {
     fstream fd;
-    fd.open("student.dat", ios::in | ios::out | ios::trunc);
+    fstream ft;
+
+    fd.open("student.dat", ios::in | ios::binary);
+
     if (!fd)
     {
-        cout << "File Not Found ";
-        exit(0);
+        cout << "File Not Found" << endl;
+        return;
     }
-    int choice, sid;
-    cout << "-----------------------------" << endl;
-    cout << " 1. Delete all \n 2. Delete by id ";
-    cout << "-----------------------------" << endl;
-    cout << "\n Enter your choice : ";
-    cin >> choice;
-    if (choice == 1)
+
+    ft.open("temp.dat", ios::out | ios::binary);
+
+    if (!ft)
     {
+        cout << "Temporary file could not be opened" << endl;
         fd.close();
-        remove("student.dat");
-        cout << "ALL DELETED SUCCESSFULLY" << endl;
-        exit(0);
+        return;
     }
-<<<<<<< HEAD
 
     cout << "Enter student id to delete: ";
     int sid;
@@ -305,42 +251,22 @@ void student::del()
             cout << "Are you sure you want to delete this record? (y/n): ";
             cin >> wantToDelete;
             if (wantToDelete)
-=======
-    else if (choice == 2)
-    {
-        cout << "Enter student id to delete : ";
-        cin >> sid;
-        fstream temp;
-        temp.open("temp.dat", ios::out | ios::binary);
-        if (!temp)
-        {
-            cout << "File not found";
-            exit(0);
-        }
-        while (fd.read((char *)this, sizeof(student)))
-        {
-            if (stu_id != sid)
->>>>>>> b6893f23f88b5d8fe003f70cd106909baf4228c7
             {
-                temp.write((char *)this, sizeof(student));
+                found = true;
+                cout << "Student record deleted successfully!" << endl;
             }
         }
-<<<<<<< HEAD
         else
         {
             ft.write((char *)this, sizeof(student));
         }
-=======
-        fd.close();
-        temp.close();
-        remove("student.dat");
-        rename("temp.dat", "student.dat");
-        cout << "DELETED SUCCESSFULLY" << endl;
->>>>>>> b6893f23f88b5d8fe003f70cd106909baf4228c7
     }
-    else
+
+    fd.close();
+    ft.close();
+
+    if (!found)
     {
-<<<<<<< HEAD
         cout << "Invalid choice" << endl;
         remove("temp.dat");
         return;
@@ -348,10 +274,6 @@ void student::del()
 
     remove("student.dat");
     rename("temp.dat", "student.dat");
-=======
-        cout << "Invalid choice";
-    }
->>>>>>> b6893f23f88b5d8fe003f70cd106909baf4228c7
 }
 void student::display1()
 {
@@ -389,7 +311,6 @@ void student::display1()
     }
     fs.close();
 }
-<<<<<<< HEAD
 void Admin()
 {
     student s;
@@ -412,21 +333,6 @@ void Admin()
             cout << "MAKE CHOICE : ";
             cin >> choice;
             switch (choice)
-=======
-void stu(){
-    student s;
-int c;
-     do
-        {   
-            cout<<"-----------------------------"<<endl;
-            cout << "\n1. Display your info ";
-            cout << "\n2. Search student ";
-            cout << "\n3. Exit" << endl;
-            cout<<"-----------------------------"<<endl;
-            cout << "MAKE CHOICE : ";
-            cin >> c;
-            switch (c)
->>>>>>> b6893f23f88b5d8fe003f70cd106909baf4228c7
             {
             case 1:
                 s.add();
@@ -435,7 +341,6 @@ int c;
                 s.display();
                 break;
             case 3:
-<<<<<<< HEAD
                 s.search();
                 break;
             case 4:
@@ -467,40 +372,11 @@ void stu()
         cout << "\n1. Display single student ";
         cout << "\n2. Search student ";
         cout << "\n3. Exit" << endl;
-=======
-                break;
-            default:
-                cout << "Invalid Choice" << endl;
-                break;
-            }
-        }while(c!= 3);
-    }
-void admin(){
-    int pass;
-    cout<<"Enter your passwoed to continue :";
-    cin>>pass;
-    int p=7513;
-    if(pass==p){
-    student a;
-    int choice;
-    cout<<"-------ACCESS GRANTED------- "<<endl;
-    do{
-    cout << "-----------------------------" << endl;
-    cout<<" 1. Add Student "<<endl;
-    cout << "2. Display single student "<<endl;
-        cout << "3. Display all student "<<endl;
-        cout << "4. Search student "<<endl;
-        cout << "5. Update student "<<endl;
-        cout << "6. Delete student "<<endl;
-        cout << "7. Exit" << endl;
-        cout<<"-----------------------------"<<endl;
->>>>>>> b6893f23f88b5d8fe003f70cd106909baf4228c7
         cout << "MAKE CHOICE : ";
         cin >> choice;
-      switch (choice)
+        switch (choice)
         {
         case 1:
-<<<<<<< HEAD
             s.display1();
             break;
         case 2:
@@ -531,54 +407,3 @@ int main()
         stu();
     }
 }
-=======
-            a.add();
-            break;
-        case 2:
-            a.display1();
-            break;
-        case 3:
-            a.display();
-            break;
-        case 4:
-            a.search();
-            break;
-        case 5:
-            a.update();
-            break; 
-        case 6:
-            a.del();
-            break;
-        case 7:
-            break;
-            default:
-            cout << " Invalid Choice ";
-            break;
-        }
-    }while(choice!=7);
-}
-
-    else
-    cout<<"-------ACCESS DENIED-------";
-}
-
-int main()
-{
-    cout << " ---STUDENT MANAGEMENT SYSTEM---" << endl;
-    student s;
-    int c;
-    do
-    {
-        cout << "\tYour Role ? \n\t 1. Admin \n\t 2. Student \n\t 3. Exit ";
-        cout << "Make choice : ";
-        cin >> c;
-        if(c==1){
-        admin();
-        }
-        else if(c==2){
-            stu();
-        }
-    }while (c!=3);
-    cout<<" EXIT SUCCESSFUL ";
-}
->>>>>>> b6893f23f88b5d8fe003f70cd106909baf4228c7
