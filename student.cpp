@@ -117,7 +117,7 @@ void student::search()
     }
     if (!found)
     {
-        cout << " Student not found" << endl;
+        cout << "\nStudent not found" << endl;
     }
     fs.close();
 }
@@ -152,13 +152,13 @@ void student::update()
             {
             case 1:
                 cout << "Enter new name: ";
-                cin.ignore(); // Clear the input buffer before reading a new line
+                cin.ignore();
                 cin.getline(name, 50);
                 break;
 
             case 2:
                 cout << "Enter new class name: ";
-                cin.ignore(); // Clear the input buffer before reading a new line
+                cin.ignore();
                 cin.getline(classsname, 20);
                 break;
 
@@ -170,13 +170,13 @@ void student::update()
 
             case 4:
                 cout << "Enter new father's name: ";
-                cin.ignore(); // Clear the input buffer before reading a new line
+                cin.ignore();
                 cin.getline(fathername, 30);
                 break;
 
             case 5:
                 cout << "Enter new contact number: ";
-                cin.ignore(); // Clear the input buffer before reading a new line
+                cin.ignore();
                 cin.getline(contactno, 15);
                 break;
             case 6:
@@ -307,7 +307,7 @@ void student::display1()
     }
     if (!found)
     {
-        cout << " Student not found" << endl;
+        cout << "\nStudent not found" << endl;
     }
     fs.close();
 }
@@ -317,9 +317,9 @@ void Admin()
     int choice;
     cout << "-----------------------------" << endl;
     int code;
-    cout << "if you are Admin, Enter code ";
+    cout << "if you are Admin, Enter code: ";
     cin >> code;
-    if (code == 1234)
+    if (code == 1357)
     {
         do
         {
@@ -392,10 +392,11 @@ void stu()
 
 int main()
 {
+    system("cls");
     cout << " ---STUDENT MANAGEMENT SYSTEM---" << endl;
     int position;
+    cout << "\n1. Admin \n2. Student" << endl;
     cout << "Enter your position : ";
-    cout << "\n1.Admin \n2. Student" << endl;
     cin >> position;
     int ch;
     if (position == 1)
