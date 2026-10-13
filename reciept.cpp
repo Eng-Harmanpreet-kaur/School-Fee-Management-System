@@ -19,7 +19,7 @@ public:
     void recordPayment();
     void displayReceipt();
     void updatePayment();
-    // void deletePayment();
+    void deletePayment();
 };
 
 void FeeReceipt::recordPayment()
@@ -547,23 +547,130 @@ void FeeReceipt::updatePayment()
     }
 }
 
-// void FeeReceipt::deletePayment()
-// {
-//     int deleteReceipt;
-//     // ifstream file("payment.txt",ios::in,ios::binary);
-//     // cout << "Enter receipt number to delete: ";
-//     cin >> deleteReceipt;
-//     if (cin.fail())
-//     {
-//         cout << "\n< ERROR: Receipt Number must be an integer >" << endl;
-//         cin.clear();
-//         cin.ignore(1000, '\n');
-//         file.close();
-//         tempFile.close();
-//         remove("temp.txt");
-//         return;
-//     }
-// }
+void FeeReceipt::deletePayment()
+{
+    int deleteReceipt;
+    bool found = false;
+
+    cout << "Enter Receipt Number to Delete: ";
+    cin >> deleteReceipt;
+
+    if (cin.fail())
+    {
+        cout << "\n< ERROR: Receipt Number must be an integer >" << endl;
+        cin.clear();
+        cin.ignore(1000, '\n');
+        return;
+    }
+    cin.ignore();
+
+    ifstream file("payment.txt");
+    if (!file)
+    {
+        cout << "\n< ERROR: Unable to open payment file >" << endl;
+        return;
+    }
+
+    ofstream tempFile("temp.txt");
+    if (!tempFile)
+    {
+        cout << "\n< ERROR: Unable to open temporary file >" << endl;
+        file.close();
+        return;
+    }
+
+    while (file >> receiptNo >> studentID >> amountPaid >> paydate >> paymentMethod)
+    {
+        file.ignore();
+        getline(file, remarks);
+
+        if (receiptNo == deleteReceipt)
+        {
+            cout << "\n------ RECEIPT DETAILS ------\n";
+            cout << "Receipt Number: " << receiptNo << endl;
+            cout << "Student ID: " << studentID << endl;
+            cout << "Amount Paid: " << amountPaid << endl;
+            cout << "Payment Date: " << paydate << endl;
+            cout << "Payment Method: " << paymentMethod << endl;
+            cout << "Remarks: " << remarks << endl;
+
+            char confirm;
+
+            while (true)
+            {
+                cout << "\nAre you sure you want to delete this receipt? (Y/N): ";
+                cin >> confirm;
+
+                if (confirm == 'Y' || confirm == 'y')
+                {
+                    found = true;
+                    break;
+                }
+                else if (confirm == 'N' || confirm == 'n')
+                {
+                    cout << "\n< Deletion cancelled >" << endl;
+                    file.close();
+                    tempFile.close();
+                    remove("temp.txt");
+                    return;
+                }
+                else
+                {
+                    cout << "\n< Invalid input! Enter Y or N only >" << endl;
+                    cin.ignore(1000, '\n');
+                }
+            }
+
+            continue;
+        }
+
+        tempFile << receiptNo << " "
+                 << studentID << " "
+                 << amountPaid << " "
+                 << paydate << " "
+                 << paymentMethod << " "
+                 << remarks << endl;
+    }
+
+    file.close();
+    tempFile.close();
+
+    if (!found)
+    {
+        remove("temp.txt");
+        cout << "\n< ERROR: Receipt not found >" << endl;
+        return;
+    }
+    remove("payment_backup.txt");
+
+    if (rename("payment.txt", "payment_backup.txt") != 0)
+    {
+        remove("temp.txt");
+        cout << "\n< ERROR: Unable to back up payment file >" << endl;
+        return;
+    }
+
+    if (rename("temp.txt", "payment.txt") == 0)
+    {
+        remove("payment_backup.txt");
+        cout << "\n< Payment record deleted successfully >" << endl;
+    }
+    else
+    {
+        if (rename("payment_backup.txt", "payment.txt") == 0)
+        {
+            cout << "\n< ERROR: Deletion failed, original restored >" << endl;
+        }
+        else
+        {
+            cout << "\n< ERROR: Restore payment_backup.txt manually >" << endl;
+        }
+
+        remove("temp.txt");
+        return;
+    }
+}
+
 void Admin()
 {
     FeeReceipt fee;
@@ -596,7 +703,7 @@ void Admin()
                 fee.updatePayment();
                 break;
             case 4:
-                // fee.deletePayment();
+                fee.deletePayment();
                 break;
             case 5:
                 cout << "Exiting...\n";
@@ -620,7 +727,7 @@ void stu()
         cout << endl;
         cout << "--------MENU--------";
         cout << "\n1. Display Receipt Record\n";
-        cout << "2. exit\n\n";
+        cout << "2. exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
         switch (choice)
@@ -640,8 +747,7 @@ int main()
 {
     system("cls");
     int position;
-    cout << "\n< ---STUDENT MANAGEMENT SYSTEM--->\n"
-         << endl;
+    cout << "\n< ---STUDENT MANAGEMENT SYSTEM--->\n" << endl;
     cout << "1. Admin\n";
     cout << "2. Student\n";
     cout << "Enter your position: ";
