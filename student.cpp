@@ -2,7 +2,6 @@
 #include <fstream>
 #include <string>
 using namespace std;
-
 class student
 {
 private:
@@ -13,7 +12,6 @@ private:
     char fathername[30];
     char contactno[15];
     float totalfee;
-
 public:
     void add();
     void display();
@@ -50,7 +48,7 @@ void student::add()
     {
         if (temp.stu_id == stu_id)
         {
-            cout << "ERROR: Student ID already exists!" << endl;
+            cout << "< ERROR: Student ID already exists! >" << endl;
             fin.close();
             return;
         }
@@ -77,17 +75,18 @@ void student::add()
     cin >> totalfee;
     if (cin.fail())
     {
-        cout << "\n< Fee must be an integer or float  >" << endl;
+        cout << "\n< Fee must be an integer or float >" << endl;
         cin.clear();
         cin.ignore(100, '\n');
         return;
     }
     bool wantToAdd;
-    cout << "Do you want to add this record? (y/n): ";
+    cout << "Are you sure you want to delete this record? (1/0) ";
+    cout << "'1' is for yes '0' is for no: ";
     cin >> wantToAdd;
     if (cin.fail())
     {
-        cout << "\n< ERROR: Invalid input! >\n you have to enter 1 or 0 \n 1 is for yes\n 0 is for no  " << endl;
+        cout << "\n< ERROR: Invalid input! >" << endl;
         cin.clear();
         cin.ignore(100, '\n');
         return;
@@ -292,12 +291,13 @@ void student::update()
             else if (choice == 8 || choice == 1 || choice == 2 || choice == 3 || choice == 4 || choice == 5 || choice == 6)
             {
                 bool wantToUpdate;
-                cout << "Do you want to make this change? (y/n): ";
+                cout << "Are you sure you want to delete this record? (1/0) ";
+                cout << "'1' is for yes '0' is for no: ";
                 cin >> wantToUpdate;
                 if (cin.fail())
                 {
                     cout << "-----------------------------" << endl;
-                    cout << "\n< ERROR: Invalid input! >\n you have to enter 1 or 0 \n 1 is for yes\n 0 is for no  " << endl;
+                    cout << "\n< ERROR: Invalid input! >" << endl;
                     cin.clear();
                     cin.ignore(100, '\n');
                     return;
@@ -357,7 +357,7 @@ void student::del()
             if (cin.fail())
                 if (cin.fail())
                 {
-                    cout << "\n< ERROR: Invalid input! " << endl;
+                    cout << "\n< ERROR: Invalid input! >" << endl;
                     cin.clear();
                     cin.ignore(100, '\n');
                     return;
@@ -478,7 +478,7 @@ void Admin()
                 exit(0);
                 break;
             default:
-                cout << " \n <ERROR:Invalid Choice> \n ";
+                cout << " \n < ERROR: Invalid Choice > \n ";
             }
         } while (choice != 6);
     }
@@ -532,7 +532,6 @@ int main()
             cin.ignore(1000, '\n');
             return -1;
         }
-
         if (position == 1)
         {
             Admin();
