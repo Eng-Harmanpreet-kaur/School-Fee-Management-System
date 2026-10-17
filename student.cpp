@@ -304,7 +304,7 @@ void student::update()
                 }
                 if (wantToUpdate)
                 {
-                    fu.seekp(fu.tellg() - sizeof(student)); // fu.seekp(fu.tellg(),ios::cur);
+                    fu.seekp(fu.tellg(),ios::cur);
                     fu.write((char *)this, sizeof(student));
                     cout << "-----------------------------" << endl;
                     cout << "UPDATE SUCCESSFUL" << endl;
@@ -351,12 +351,13 @@ void student::del()
         if (stu_id == sid)
         {
             bool wantToDelete;
-            cout << "Are you sure you want to delete this record? (y/n): ";
+            cout << "Are you sure you want to delete this record? (1/0) ";
+            cout << "'1' is for yes '0' is for no: ";
             cin >> wantToDelete;
             if (cin.fail())
                 if (cin.fail())
                 {
-                    cout << "\n< ERROR: Invalid input! >\n you have to enter 1 or 0 \n 1 is for yes\n 0 is for no  " << endl;
+                    cout << "\n< ERROR: Invalid input! " << endl;
                     cin.clear();
                     cin.ignore(100, '\n');
                     return;
@@ -441,10 +442,11 @@ void Admin()
     int code;
     cout << "if you are Admin, Enter code ";
     cin >> code;
-    if (code == 1234)
+    if (code == 1357)
     {
         do
         {
+            cout << endl;
             cout << "------Admin Menu------" << endl;
             cout << "1. Add student ";
             cout << "\n2. Display all student ";
