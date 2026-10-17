@@ -12,6 +12,7 @@ private:
     char fathername[30];
     char contactno[15];
     float totalfee;
+
 public:
     void add();
     void display();
@@ -20,6 +21,7 @@ public:
     void del();
     void display1();
 };
+
 void student::add()
 {
     ofstream f("student.dat", ios::app | ios::binary);
@@ -42,20 +44,20 @@ void student::add()
     ifstream fin("student.dat", ios::binary);
     if (fin)
     {
-    student temp;
+        student temp;
 
-    while (fin.read((char*)&temp, sizeof(student)))
-    {
-        if (temp.stu_id == stu_id)
+        while (fin.read((char *)&temp, sizeof(student)))
         {
-            cout << "< ERROR: Student ID already exists! >" << endl;
-            fin.close();
-            return;
+            if (temp.stu_id == stu_id)
+            {
+                cout << "< ERROR: Student ID already exists! >" << endl;
+                fin.close();
+                return;
+            }
         }
-    }
 
-    fin.close();
-}
+        fin.close();
+    }
     cout << "Enter student name :\n";
     cin.ignore();
     cin.getline(name, 50);
@@ -105,6 +107,7 @@ void student::add()
 
     f.close();
 }
+
 void student::display()
 {
     fstream fl;
@@ -128,6 +131,7 @@ void student::display()
     }
     fl.close();
 }
+
 void student::search()
 {
     int sid;
@@ -174,6 +178,7 @@ void student::search()
     }
     fs.close();
 }
+
 void student::update()
 {
     fstream fu;
@@ -304,7 +309,7 @@ void student::update()
                 }
                 if (wantToUpdate)
                 {
-                    fu.seekp(fu.tellg(),ios::cur);
+                    fu.seekp(fu.tellg(), ios::cur);
                     fu.write((char *)this, sizeof(student));
                     cout << "-----------------------------" << endl;
                     cout << "UPDATE SUCCESSFUL" << endl;
@@ -321,6 +326,7 @@ void student::update()
     }
     fu.close();
 }
+
 void student::del()
 {
     ifstream fd;
@@ -377,7 +383,6 @@ void student::del()
             ft.write((char *)this, sizeof(student));
         }
     }
-
     fd.close();
     ft.close();
 
@@ -396,6 +401,7 @@ void student::del()
         rename("temp.dat", "student.dat");
     }
 }
+
 void student::display1()
 {
     fstream fs;
@@ -435,6 +441,7 @@ void student::display1()
     }
     fs.close();
 }
+
 void Admin()
 {
     student s;
@@ -487,6 +494,7 @@ void Admin()
         cout << "Invalid code" << endl;
     }
 }
+
 void stu()
 {
     int choice;
@@ -549,7 +557,6 @@ int main()
             cout << "Invalid position" << endl;
             continue;
         }
-
     } while (position != 3);
     return 0;
 }
