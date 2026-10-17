@@ -237,13 +237,13 @@ void student::update()
             {
             case 1:
                 cout << "Enter new name: ";
-                cin.ignore(); // Clear the input buffer before reading a new line
+                cin.ignore();
                 cin.getline(name, 50);
                 break;
 
             case 2:
                 cout << "Enter new class name: ";
-                cin.ignore(); // Clear the input buffer before reading a new line
+                cin.ignore();
                 cin.getline(classsname, 20);
                 break;
 
@@ -255,13 +255,13 @@ void student::update()
 
             case 4:
                 cout << "Enter new father's name: ";
-                cin.ignore(); // Clear the input buffer before reading a new line
+                cin.ignore();
                 cin.getline(fathername, 30);
                 break;
 
             case 5:
                 cout << "Enter new contact number: ";
-                cin.ignore(); // Clear the input buffer before reading a new line
+                cin.ignore();
                 cin.getline(contactno, 15);
                 break;
             case 6:
@@ -440,7 +440,7 @@ void Admin()
     student s;
     int choice;
     int code;
-    cout << "if you are Admin, Enter code ";
+    cout << "if you are Admin, Enter code: ";
     cin >> code;
     if (code == 1357)
     {
@@ -474,10 +474,11 @@ void Admin()
                 s.del();
                 break;
             case 6:
+                cout << "EXITING..." << endl;
                 exit(0);
                 break;
             default:
-                cout << " Invalid Choice ";
+                cout << " \n <ERROR:Invalid Choice> \n ";
             }
         } while (choice != 6);
     }
@@ -540,9 +541,13 @@ int main()
         {
             stu();
         }
+        else if (position == 3)
+        {
+            cout << "Exiting..." << endl;
+        }
         else
         {
-            cout << "Invalid position. Exiting..." << endl;
+            cout << "Invalid position" << endl;
             continue;
         }
 
