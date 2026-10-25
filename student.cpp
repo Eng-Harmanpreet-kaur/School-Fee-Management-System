@@ -360,6 +360,7 @@ cin>>choice;
 else if(choice==2){
 fd.open("student.dat",ios::out);
 cout<<"All records deleted "<<endl;
+    fd.close();
 }
 else{
     cout<<"Invalid Choice "<<endl;
