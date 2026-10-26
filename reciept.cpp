@@ -4,7 +4,6 @@
 #include <fstream>
 #include <stdexcept>
 using namespace std;
-
 class FeeReceipt
 {
 private:
@@ -20,7 +19,6 @@ public:
     void updatePayment();
     void deletePayment();
 };
-
 void FeeReceipt::recordPayment()
 {
     cout << "\n---------- Record Fee Payment ----------\n";
@@ -34,7 +32,7 @@ void FeeReceipt::recordPayment()
         return;
     }
     cin.ignore();
-    ifstream f1("payment.txt");
+    ifstream f1("payment.dat", ios::in | ios::binary);
     if (f1)
     {
         int existingReceipt;
@@ -65,7 +63,7 @@ void FeeReceipt::recordPayment()
         return;
     }
     cin.ignore();
-    ifstream f2("payment.txt");
+    ifstream f2("payment.dat", ios::in | ios::binary);
     if (f2)
     {
         int existingReceipt;
@@ -80,6 +78,7 @@ void FeeReceipt::recordPayment()
             if (existingStudentID == studentID)
             {
                 cout << "\nERROR: Student ID already exists!" << endl;
+
                 f2.close();
                 return;
             }
@@ -126,7 +125,8 @@ void FeeReceipt::recordPayment()
         cout << "\n< ERROR: " << e.what() << " >" << endl;
         return;
     }
-    ofstream file("payment.txt", ios::app);
+
+    ofstream file("payment.dat", ios::out | ios::app | ios::binary);
     if (!file)
     {
         cout << "\n< ERROR: Unable to open payment file >" << endl;
@@ -149,7 +149,7 @@ void FeeReceipt::displayReceipt()
     int searchreceiptno;
     cout << "Enter Receipt Number to Search: ";
     cin >> searchreceiptno;
-    ifstream file("payment.txt");
+    ifstream file("payment.dat", ios::in | ios::binary);
     try
     {
         if (!file)
@@ -203,7 +203,7 @@ void FeeReceipt::updatePayment()
     bool found = false;
     bool changed = false;
     bool cancelled = false;
-    ifstream file("payment.txt");
+    ifstream file("payment.dat", ios::in | ios::binary);
     try
     {
         if (!file)
@@ -216,8 +216,7 @@ void FeeReceipt::updatePayment()
         cout << "\n< ERROR: " << e.what() << " >" << endl;
         return;
     }
-
-    ofstream tempFile("temp.txt");
+    ofstream tempFile("temp.dat", ios::out | ios::binary);
     if (!tempFile)
     {
         cout << "\n< ERROR: Unable to open temporary file >" << endl;
@@ -233,7 +232,7 @@ void FeeReceipt::updatePayment()
         cin.ignore(1000, '\n');
         file.close();
         tempFile.close();
-        remove("temp.txt");
+        remove("temp.dat");
         return;
     }
     while (file >> receiptNo >> studentID >> amountPaid >> paydate >> paymentMethod)
@@ -286,7 +285,7 @@ void FeeReceipt::updatePayment()
                     if (!cin.fail())
                     {
                         cin.ignore(1000, '\n');
-                        ifstream f3("payment.txt");
+                        ifstream f3("payment.dat", ios::in | ios::binary);
                         if (f3)
                         {
                             int existingReceipt;
@@ -298,7 +297,6 @@ void FeeReceipt::updatePayment()
                             while (f3 >> existingReceipt >> existingStudentID >> existingAmount >> existingDate >> existingMethod)
                             {
                                 getline(f3, existingRemarks);
-
                                 if (existingReceipt == value)
                                 {
                                     cout << "\nERROR: Receipt Number already exists!" << endl;
@@ -327,7 +325,7 @@ void FeeReceipt::updatePayment()
                     if (!cin.fail())
                     {
                         cin.ignore(1000, '\n');
-                        ifstream f3("payment.txt");
+                        ifstream f3("payment.dat", ios::in | ios::binary);
                         if (f3)
                         {
                             int existingReceipt;
@@ -421,8 +419,7 @@ void FeeReceipt::updatePayment()
             if (changed && !cancelled)
             {
                 char confirm;
-                cout << "\nAre you sure you want to save "
-                     << "these changes? (Y/N): ";
+                cout << "\nAre you sure you want to save "<< "these changes? (Y/N): ";
                 cin >> confirm;
                 if (confirm != 'Y' && confirm != 'y')
                 {
@@ -437,32 +434,33 @@ void FeeReceipt::updatePayment()
     tempFile.close();
     if (!found)
     {
-        remove("temp.txt");
+        remove("temp.dat");
         cout << "\n< ERROR: Receipt not found >" << endl;
         return;
     }
     if (cancelled || !changed)
     {
-        remove("temp.txt");
+        remove("temp.dat");
         if (!cancelled)
             cout << "\n< No changes made >" << endl;
+
         return;
     }
-    remove("payment_backup.txt");
-    if (rename("payment.txt", "payment_backup.txt") != 0)
+    remove("payment_backup.dat");
+    if (rename("payment.dat", "payment_backup.dat") != 0)
     {
-        remove("temp.txt");
+        remove("temp.dat");
         cout << "\n< ERROR: Unable to back up payment file >" << endl;
         return;
     }
-    if (rename("temp.txt", "payment.txt") == 0)
+    if (rename("temp.dat", "payment.dat") == 0)
     {
-        remove("payment_backup.txt");
+        remove("payment_backup.dat");
         cout << "\n< Payment record updated successfully >" << endl;
     }
     else
     {
-        if (rename("payment_backup.txt", "payment.txt") == 0)
+        if (rename("payment_backup.dat", "payment.dat") == 0)
         {
             cout << "\n< ERROR: Changes not saved; original restored >" << endl;
         }
@@ -470,7 +468,7 @@ void FeeReceipt::updatePayment()
         {
             cout << "\n< ERROR: Restore payment_backup.txt manually >" << endl;
         }
-        remove("temp.txt");
+        remove("temp.dat");
         return;
     }
 }
@@ -489,13 +487,13 @@ void FeeReceipt::deletePayment()
         return;
     }
     cin.ignore();
-    ifstream file("payment.txt");
+    ifstream file("payment.dat", ios::in | ios::binary);
     if (!file)
     {
         cout << "\n< ERROR: Unable to open payment file >" << endl;
         return;
     }
-    ofstream tempFile("temp.txt");
+    ofstream tempFile("temp.dat", ios::out | ios::binary);
     if (!tempFile)
     {
         cout << "\n< ERROR: Unable to open temporary file >" << endl;
@@ -530,7 +528,7 @@ void FeeReceipt::deletePayment()
                     cout << "\n< Deletion cancelled >" << endl;
                     file.close();
                     tempFile.close();
-                    remove("temp.txt");
+                    remove("temp.dat");
                     return;
                 }
                 else
@@ -552,25 +550,25 @@ void FeeReceipt::deletePayment()
     tempFile.close();
     if (!found)
     {
-        remove("temp.txt");
+        remove("temp.dat");
         cout << "\n< ERROR: Receipt not found >" << endl;
         return;
     }
-    remove("payment_backup.txt");
-    if (rename("payment.txt", "payment_backup.txt") != 0)
+    remove("payment_backup.dat");
+    if (rename("payment.dat", "payment_backup.dat") != 0)
     {
-        remove("temp.txt");
+        remove("temp.dat");
         cout << "\n< ERROR: Unable to back up payment file >" << endl;
         return;
     }
-    if (rename("temp.txt", "payment.txt") == 0)
+    if (rename("temp.dat", "payment.dat") == 0)
     {
-        remove("payment_backup.txt");
+        remove("payment_backup.dat");
         cout << "\n< Payment record deleted successfully >" << endl;
     }
     else
     {
-        if (rename("payment_backup.txt", "payment.txt") == 0)
+        if (rename("payment_backup.dat", "payment.dat") == 0)
         {
             cout << "\n< ERROR: Deletion failed, original restored >" << endl;
         }
@@ -578,7 +576,7 @@ void FeeReceipt::deletePayment()
         {
             cout << "\n< ERROR: Restore payment_backup.txt manually >" << endl;
         }
-        remove("temp.txt");
+        remove("temp.dat");
         return;
     }
 }
