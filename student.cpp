@@ -8,7 +8,7 @@ private:
     int stu_id;
     char name[50];
     char section[5];
-    char classsname[20];
+    char classname[20];
     char fathername[30];
     char contactno[15];
     float totalfee;
@@ -27,87 +27,44 @@ void student::add()
     ofstream f("student.dat", ios::app | ios::binary);
     if (!f)
     {
-        cout << "file not found";
+        cout << "Error with file opening ";
         return;
     }
-    cout << "-----------------------------" << endl;
-    cout << " Enter student id : \n";
+    cout<<"---------------------------\n";
+    cout << "ADD STUDENT INFO \n";
+    cout << "Enter student id : ";
     cin >> stu_id;
-    if (cin.fail())
-    {
-        cout << "\n< ERROR: Student id must be an integer >" << endl;
-        cin.clear();
-        cin.ignore(100, '\n');
-        f.close();
-        return;
-    }
-    ifstream fin("student.dat", ios::binary);
-    if (fin)
-    {
-        student temp;
-
-        while (fin.read((char *)&temp, sizeof(student)))
-        {
-            if (temp.stu_id == stu_id)
-            {
-                cout << "< ERROR: Student ID already exists! >" << endl;
-                fin.close();
-                return;
-            }
-        }
-
-        fin.close();
-    }
-    cout << "Enter student name :\n";
+    cout << "\nEnter student name : ";
     cin.ignore();
     cin.getline(name, 50);
-    cout << "Enter class name :\n";
-    cin.ignore();
-    cin.getline(classsname, 20);
-    cout << "Enter section :\n";
-    cin.ignore();
+    cout << "\nEnter class name : ";
+    cin.getline(classname, 20);
+    cout << "\nEnter section : ";
     cin.getline(section, 5);
-    cout << "Enter father's name :\n";
-    cin.ignore();
+    cout << "\nEnter father's name : ";
     cin.getline(fathername, 30);
-    cout << "Enter contact number :\n";
-    cin.ignore();
+    cout << "\nEnter contact number : ";
     cin.getline(contactno, 15);
-    cout << "Enter total fee paid :\n";
+    cout << "\nEnter total fee paid : ";
     cin >> totalfee;
-    if (cin.fail())
+    cout<<"---------------------------\n";
+    cout << " U sure to add this info (Y/N) \n";
+    char confirm;
+    cin >> confirm;
+    if (confirm == 'Y' || confirm == 'y')
     {
-        cout << "\n< Fee must be an integer or float >" << endl;
-        cin.clear();
-        cin.ignore(100, '\n');
-        return;
-    }
-    bool wantToAdd;
-    cout << "Are you sure you want to delete this record? (1/0) ";
-    cout << "'1' is for yes '0' is for no: ";
-    cin >> wantToAdd;
-    if (cin.fail())
-    {
-        cout << "\n< ERROR: Invalid input! >" << endl;
-        cin.clear();
-        cin.ignore(100, '\n');
-        return;
-    }
-    if (wantToAdd)
-    {
-        cout << "-----------------------------" << endl;
         f.write((char *)this, sizeof(student));
-        cout << "Record added successfully!" << endl;
+        f.close();
+        cout << "Record added Successfully \n";
+    }
+    if (confirm == 'N' || confirm == 'n')
+    {
+        cout << "Record addition cancelled \n";
+        f.close();
     }
     else
-    {
-        cout << "Record addition cancelled." << endl;
-        return;
-    }
-
-    f.close();
+        cout << "Invalid Action ";
 }
-
 void student::display()
 {
     fstream fl;
@@ -122,7 +79,7 @@ void student::display()
         cout << "-----------------------------" << endl;
         cout << "Student id " << stu_id << endl;
         cout << "Student name " << name << endl;
-        cout << "Class name " << classsname << endl;
+        cout << "Class name " << classname << endl;
         cout << "Section " << section << endl;
         cout << "Father's name " << fathername << endl;
         cout << "Contact number " << contactno << endl;
@@ -159,7 +116,7 @@ void student::search()
             cout << "-----------------------------" << endl;
             cout << "Student id " << stu_id << endl;
             cout << "Student name " << name << endl;
-            cout << "Class name " << classsname << endl;
+            cout << "Class name " << classname << endl;
             cout << "Section " << section << endl;
             cout << "Father's name " << fathername << endl;
             cout << "Contact number " << contactno << endl;
@@ -178,160 +135,165 @@ void student::search()
     }
     fs.close();
 }
-
 void student::update()
 {
-    fstream fu;
-    fu.open("student.dat", ios::in | ios::out | ios::binary);
-    if (!fu)
+    fstream fu("student.dat", ios::in | ios::binary);
+    ofstream temp("temp.dat", ios::binary);
+
+    if (!fu || !temp)
     {
         cout << "File not found";
         return;
     }
-    cout << "Enter student id to update : ";
-    int sid;
+
+    int sid, choice;
+    bool found = 0;
+    student s;
+
+    cout << "Enter student id to update: ";
     cin >> sid;
+
     if (cin.fail())
     {
-        cout << "\n< ERROR: Student id must be an integer >" << endl;
+        cout << "Student id must be an integer";
         cin.clear();
         cin.ignore(1000, '\n');
         return;
     }
-    bool found = false;
-    bool cancelled = false;
-    int choice;
-    while (fu.read((char *)this, sizeof(student)))
+
+    while (fu.read((char *)&s, sizeof(student)))
     {
-        if (stu_id == sid)
+        if (s.stu_id == sid)
         {
-            found = true;
-            cout << "------Current Student Details------" << endl;
-            cout << "Student id " << stu_id << endl;
-            cout << "Student name " << name << endl;
-            cout << "Class name " << classsname << endl;
-            cout << "Section " << section << endl;
-            cout << "Father's name " << fathername << endl;
-            cout << "Contact number " << contactno << endl;
-            cout << "Total fee paid " << totalfee << endl;
-            cout << "------Enter What Do You Want To Update ?------" << endl;
-
-            cout << "1. Update name \n";
-            cout << "2. Update class name \n";
-            cout << "3. Update section \n";
-            cout << "4. Update father's name \n";
-            cout << "5. Update contact number" << endl;
-            cout << "6. Update total fee paid" << endl;
-            cout << "7. Cancel all changes" << endl;
-            cout << "8. Finish updating" << endl;
-            cout << "------------------------------" << endl;
-            cout << "Enter your choice to update: ";
-            cin >> choice;
-            if (cin.fail())
+            cout << "---------------------------\n";
+            found = 1;
+            cout << "student record u searched for :" << endl;
+            cout << "Student ID : " << stu_id << endl;
+            cout << "Name : " << name << endl;
+            cout << "Class : " << classname << endl;
+            cout << "Section : " << section << endl;
+            cout << "Father's Name : " << fathername << endl;
+            cout << "Contact No. : " << contactno << endl;
+            do
             {
-                cout << "< ERROR: Enter a valid choice in integer >" << endl;
-                cin.clear();
-                cin.ignore(100, '\n');
-                choice = 0;
-                continue;
-            }
-            cin.ignore();
+            cout << "---------------------------\n";
+            cout << "Record Found\n";
+            cout << "1. Update name\n";
+            cout << "2. Update class name\n";
+            cout << "3. Update section\n";
+            cout << "4. Update father's name\n";
+            cout << "5. Update contact number\n";
+            cout << "6. Update total fee paid\n";
+            cout << "7. Cancel changes\n";
+            cout << "8. Finish updating\n";
+            cout<<"---------------------------\n";
+                cout << "Enter choice: ";
+                cin >> choice;
 
-            switch (choice)
-            {
-            case 1:
-                cout << "Enter new name: ";
-                cin.ignore();
-                cin.getline(name, 50);
-                break;
-
-            case 2:
-                cout << "Enter new class name: ";
-                cin.ignore();
-                cin.getline(classsname, 20);
-                break;
-
-            case 3:
-                cout << "Enter new section: ";
-                cin.ignore();
-                cin.getline(section, 5);
-                break;
-
-            case 4:
-                cout << "Enter new father's name: ";
-                cin.ignore();
-                cin.getline(fathername, 30);
-                break;
-
-            case 5:
-                cout << "Enter new contact number: ";
-                cin.ignore();
-                cin.getline(contactno, 15);
-                break;
-            case 6:
-                cout << "Enter new total fee paid: ";
-                cin >> totalfee;
                 if (cin.fail())
                 {
-                    cout << "\n< ERROR: Total fee paid must be a number >" << endl;
                     cin.clear();
-                    cin.ignore(100, '\n');
-                    return;
+                    cin.ignore(1000, '\n');
+                    cout << "Enter a valid integer\n";
+                    continue;
                 }
-            case 7:
-                cancelled = true;
-                break;
-            case 8:
-                cout << "Finishing update..." << endl;
-            default:
-                cout << "Invalid choice!" << endl;
-            }
-            if (choice == 7)
-            {
-                cout << "-----------------------------" << endl;
-                cout << "All changes cancelled." << endl;
-                cout << "-----------------------------" << endl;
-                return;
-            }
-            else if (choice == 8 || choice == 1 || choice == 2 || choice == 3 || choice == 4 || choice == 5 || choice == 6)
-            {
-                bool wantToUpdate;
-                cout << "Are you sure you want to delete this record? (1/0) ";
-                cout << "'1' is for yes '0' is for no: ";
-                cin >> wantToUpdate;
-                if (cin.fail())
+
+                cin.ignore(1000, '\n');
+
+                switch (choice)
                 {
-                    cout << "-----------------------------" << endl;
-                    cout << "\n< ERROR: Invalid input! >" << endl;
-                    cin.clear();
-                    cin.ignore(100, '\n');
+                case 1:
+                    cout << "Enter new name: ";
+                    cin.getline(s.name, 50);
+                    break;
+
+                case 2:
+                    cout << "Enter new class name: ";
+                    cin.getline(s.classname, 20);
+                    break;
+
+                case 3:
+                    cout << "Enter new section: ";
+                    cin.getline(s.section, 5);
+                    break;
+
+                case 4:
+                    cout << "Enter new father's name: ";
+                    cin.getline(s.fathername, 30);
+                    break;
+
+                case 5:
+                    cout << "Enter new contact number: ";
+                    cin.getline(s.contactno, 15);
+                    break;
+
+                case 6:
+                    cout << "Enter new total fee paid: ";
+                    cin >> s.totalfee;
+                    if (cin.fail())
+                    {
+                        cin.clear();
+                        cin.ignore(1000, '\n');
+                        cout << "Invalid fee\n";
+                    }
+                    break;
+
+                case 7:
+                    fu.close();
+                    temp.close();
+                    remove("temp.dat");
+                    cout << "Changes cancelled";
                     return;
+
+                case 8:
+                    cout << "Finishing update...\n";
+                    break;
+
+                default:
+                    cout << "Invalid choice\n";
                 }
-                if (wantToUpdate)
-                {
-                    fu.seekp(fu.tellg(), ios::cur);
-                    fu.write((char *)this, sizeof(student));
-                    cout << "-----------------------------" << endl;
-                    cout << "UPDATE SUCCESSFUL" << endl;
-                }
-            }
+
+            } while (choice != 8);
+        }
+        char choice;
+        if (choice == 'Y' || choice == 'y')
+        {
+            temp.write((char *)&s, sizeof(student));
+            cout << "Update Done!" << endl;
+        }
+        else
+        {
+            cout << "Invalid Choice . Updation rejected " << endl;
+            return;
         }
     }
-    if (!found)
-    {
-        cout << "-----------------------------" << endl;
-        cout << "Student record not found!" << endl;
-        cout << "Invalid student id" << endl;
-        cout << "-----------------------------" << endl;
-    }
     fu.close();
+    temp.close();
+
+    if (found)
+    {
+        remove("student.dat");
+        rename("temp.dat", "student.dat");
+        cout << "Record updated successfully";
+    }
+    else
+    {
+        remove("temp.dat");
+        cout << "Student record not found";
+    }
 }
 
 void student::del()
 {
-    ifstream fd;
+    fstream fd;
     ofstream ft;
-
+      int sid,choice;
+cout<<"1. Delete By ID : "<<endl;
+cout<<"2. Delete All "<<endl;
+cout<<"Make decision : "<<endl;
+cin>>choice;
+  if (choice==1)
+    {
     fd.open("student.dat", ios::in | ios::binary);
 
     if (!fd)
@@ -348,27 +310,21 @@ void student::del()
         fd.close();
         return;
     }
+  
+    cout << "---------------------------\n";
     cout << "Enter student id to delete: ";
-    int sid;
     cin >> sid;
     bool found = false;
     while (fd.read((char *)this, sizeof(student)))
     {
         if (stu_id == sid)
         {
-            bool wantToDelete;
-            cout << "Are you sure you want to delete this record? (1/0) ";
-            cout << "'1' is for yes '0' is for no: ";
-            cin >> wantToDelete;
-            if (cin.fail())
-                if (cin.fail())
-                {
-                    cout << "\n< ERROR: Invalid input! >" << endl;
-                    cin.clear();
-                    cin.ignore(100, '\n');
-                    return;
-                }
-            if (wantToDelete)
+            char sure;
+            cout << "---------------------------------------------------\n";
+            cout << "Are you sure you want to delete this record? (Y/N)\n ";
+            cout << "---------------------------------------------------\n";
+            cin >> sure;
+            if (sure=='Y'||sure=='y')
             {
                 found = true;
                 cout << "Student record deleted successfully!" << endl;
@@ -401,6 +357,16 @@ void student::del()
         rename("temp.dat", "student.dat");
     }
 }
+else if(choice==2){
+fd.open("student.dat",ios::out);
+cout<<"All records deleted "<<endl;
+    fd.close();
+}
+else{
+    cout<<"Invalid Choice "<<endl;
+    return;
+}
+}
 
 void student::display1()
 {
@@ -419,10 +385,12 @@ void student::display1()
     {
         if (stu_id == sid)
         {
+            cout << "---------------------------\n";
             cout << "STUDENT DETAILS" << endl;
+            cout << "---------------------------\n";
             cout << "Student id " << stu_id << endl;
             cout << "Student name " << name << endl;
-            cout << "Class name " << classsname << endl;
+            cout << "Class name " << classname << endl;
             cout << "Section " << section << endl;
             cout << "Father's name " << fathername << endl;
             cout << "Contact number " << contactno << endl;
@@ -447,6 +415,7 @@ void Admin()
     student s;
     int choice;
     int code;
+    cout << "---------------------------\n";
     cout << "if you are Admin, Enter code: ";
     cin >> code;
     if (code == 1357)
@@ -461,6 +430,7 @@ void Admin()
             cout << "\n4. Update student ";
             cout << "\n5. Delete student ";
             cout << "\n6. Exit" << endl;
+            cout << "---------------------------\n";
             cout << "MAKE CHOICE : ";
             cin >> choice;
             switch (choice)
@@ -505,6 +475,7 @@ void stu()
         cout << "\n1. Display single student ";
         cout << "\n2. Search student ";
         cout << "\n3. Exit" << endl;
+        cout << "---------------------------\n";
         cout << "MAKE CHOICE : ";
         cin >> choice;
         switch (choice)
@@ -533,6 +504,7 @@ int main()
         cout << "\n1. Admin \n2. Student\n3. Exit" << endl;
         cout << "Enter your position: ";
         cin >> position;
+        cout << "---------------------------\n";
         if (cin.fail())
         {
             cout << "\n< ERROR: Position must be an integer >" << endl;
