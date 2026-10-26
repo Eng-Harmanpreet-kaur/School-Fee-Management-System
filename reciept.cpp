@@ -14,7 +14,6 @@ private:
     string paydate;
     string paymentMethod;
     string remarks;
-
 public:
     void recordPayment();
     void displayReceipt();
@@ -36,7 +35,6 @@ void FeeReceipt::recordPayment()
     }
     cin.ignore();
     ifstream f1("payment.txt");
-
     if (f1)
     {
         int existingReceipt;
@@ -45,23 +43,18 @@ void FeeReceipt::recordPayment()
         string existingDate;
         string existingMethod;
         string existingRemarks;
-
         while (f1 >> existingReceipt >> existingStudentID >> existingAmount >> existingDate >> existingMethod)
         {
             getline(f1, existingRemarks);
-
             if (existingReceipt == receiptNo)
             {
                 cout << "\nERROR: Receipt Number already exists!" << endl;
-
                 f1.close();
                 return;
             }
         }
-
         f1.close();
     }
-
     cout << "Enter Student ID: ";
     cin >> studentID;
     if (cin.fail())
@@ -73,7 +66,6 @@ void FeeReceipt::recordPayment()
     }
     cin.ignore();
     ifstream f2("payment.txt");
-
     if (f2)
     {
         int existingReceipt;
@@ -82,23 +74,18 @@ void FeeReceipt::recordPayment()
         string existingDate;
         string existingMethod;
         string existingRemarks;
-
         while (f2 >> existingReceipt >> existingStudentID >> existingAmount >> existingDate >> existingMethod)
         {
             getline(f2, existingRemarks);
-
             if (existingStudentID == studentID)
             {
                 cout << "\nERROR: Student ID already exists!" << endl;
-
                 f2.close();
                 return;
             }
         }
-
         f2.close();
     }
-
     cout << "Enter Amount Paid: ";
     cin >> amountPaid;
     if (cin.fail())
@@ -117,7 +104,6 @@ void FeeReceipt::recordPayment()
     cin.ignore();
     cout << "Enter Remarks: ";
     getline(cin, remarks);
-
     try
     {
         if (amountPaid < 0 && paymentMethod != "cash" && paymentMethod != "card" && paymentMethod != "online")
@@ -125,13 +111,11 @@ void FeeReceipt::recordPayment()
             throw invalid_argument(
                 "Amount paid cannot be negative AND Payment method is also Invalid");
         }
-
         if (amountPaid < 0)
         {
             throw invalid_argument(
                 "Amount paid cannot be negative");
         }
-
         if (paymentMethod != "cash" && paymentMethod != "card" && paymentMethod != "online")
         {
             throw invalid_argument("Invalid payment method");
@@ -142,22 +126,18 @@ void FeeReceipt::recordPayment()
         cout << "\n< ERROR: " << e.what() << " >" << endl;
         return;
     }
-
     ofstream file("payment.txt", ios::app);
-
     if (!file)
     {
         cout << "\n< ERROR: Unable to open payment file >" << endl;
         return;
     }
-
     file << receiptNo << " ";
     file << studentID << " ";
     file << amountPaid << " ";
     file << paydate << " ";
     file << paymentMethod << " ";
     file << remarks << endl;
-
     file.close();
     cout << "\n< Payment recorded successfully >"
          << endl;
@@ -169,9 +149,7 @@ void FeeReceipt::displayReceipt()
     int searchreceiptno;
     cout << "Enter Receipt Number to Search: ";
     cin >> searchreceiptno;
-
     ifstream file("payment.txt");
-
     try
     {
         if (!file)
@@ -184,12 +162,10 @@ void FeeReceipt::displayReceipt()
         cout << "\n< ERROR: " << e.what() << " >" << endl;
         return;
     }
-
     while (file >> receiptNo >> studentID >> amountPaid >> paydate >> paymentMethod)
     {
         file.ignore();
         getline(file, remarks);
-
         if (receiptNo == searchreceiptno)
         {
             cout << "\n";
@@ -208,7 +184,6 @@ void FeeReceipt::displayReceipt()
         }
     }
     file.close();
-
     try
     {
         if (!found)
@@ -228,9 +203,7 @@ void FeeReceipt::updatePayment()
     bool found = false;
     bool changed = false;
     bool cancelled = false;
-
     ifstream file("payment.txt");
-
     try
     {
         if (!file)
@@ -245,14 +218,12 @@ void FeeReceipt::updatePayment()
     }
 
     ofstream tempFile("temp.txt");
-
     if (!tempFile)
     {
         cout << "\n< ERROR: Unable to open temporary file >" << endl;
         file.close();
         return;
     }
-
     cout << "Enter Receipt Number to Update: ";
     cin >> updateReceipt;
     if (cin.fail())
@@ -265,7 +236,6 @@ void FeeReceipt::updatePayment()
         remove("temp.txt");
         return;
     }
-
     while (file >> receiptNo >> studentID >> amountPaid >> paydate >> paymentMethod)
     {
         file.ignore();
@@ -281,7 +251,6 @@ void FeeReceipt::updatePayment()
             cout << "Payment Date: " << paydate << endl;
             cout << "Payment Method: " << paymentMethod << endl;
             cout << "Remarks: " << remarks << endl;
-
             do
             {
                 cout << "\n";
@@ -297,10 +266,8 @@ void FeeReceipt::updatePayment()
                 cout << "7. Finish Editing\n";
                 cout << "8. Cancel All Changes\n";
                 cout << "-----------------------------" << endl;
-
                 cout << "Enter your choice to update: ";
                 cin >> choice;
-
                 if (cin.fail())
                 {
                     cout << "< ERROR: Enter a valid number >" << endl;
@@ -309,21 +276,17 @@ void FeeReceipt::updatePayment()
                     choice = 0;
                     continue;
                 }
-
                 switch (choice)
                 {
-
                 case 1:
                 {
                     int value;
                     cout << "Enter new Receipt Number: ";
                     cin >> value;
-
                     if (!cin.fail())
                     {
                         cin.ignore(1000, '\n');
                         ifstream f3("payment.txt");
-
                         if (f3)
                         {
                             int existingReceipt;
@@ -332,7 +295,6 @@ void FeeReceipt::updatePayment()
                             string existingDate;
                             string existingMethod;
                             string existingRemarks;
-
                             while (f3 >> existingReceipt >> existingStudentID >> existingAmount >> existingDate >> existingMethod)
                             {
                                 getline(f3, existingRemarks);
@@ -344,10 +306,8 @@ void FeeReceipt::updatePayment()
                                     return;
                                 }
                             }
-
                             f3.close();
                         }
-
                         receiptNo = value;
                         changed = true;
                     }
@@ -357,21 +317,17 @@ void FeeReceipt::updatePayment()
                         cin.clear();
                         cin.ignore(1000, '\n');
                     }
-
                     break;
                 }
-
                 case 2:
                 {
                     int value;
                     cout << "Enter new Student ID: ";
                     cin >> value;
-
                     if (!cin.fail())
                     {
                         cin.ignore(1000, '\n');
                         ifstream f3("payment.txt");
-
                         if (f3)
                         {
                             int existingReceipt;
@@ -380,11 +336,9 @@ void FeeReceipt::updatePayment()
                             string existingDate;
                             string existingMethod;
                             string existingRemarks;
-
                             while (f3 >> existingReceipt >> existingStudentID >> existingAmount >> existingDate >> existingMethod)
                             {
                                 getline(f3, existingRemarks);
-
                                 if (existingStudentID == value)
                                 {
                                     cout << "\nERROR: Student ID already exists!" << endl;
@@ -392,10 +346,8 @@ void FeeReceipt::updatePayment()
                                     return;
                                 }
                             }
-
                             f3.close();
                         }
-
                         studentID = value;
                         changed = true;
                     }
@@ -405,16 +357,13 @@ void FeeReceipt::updatePayment()
                         cin.clear();
                         cin.ignore(1000, '\n');
                     }
-
                     break;
                 }
-
                 case 3:
                 {
                     float value;
                     cout << "Enter new Amount Paid: ";
                     cin >> value;
-
                     if (!cin.fail() && value >= 0)
                     {
                         amountPaid = value;
@@ -428,21 +377,17 @@ void FeeReceipt::updatePayment()
                     }
                     break;
                 }
-
                 case 4:
                     cout << "Enter new Payment Date (DD-MM-YYYY): ";
                     cin >> paydate;
-
                     if (!cin.fail())
                         changed = true;
                     break;
-
                 case 5:
                 {
                     string payment;
                     cout << "Enter new Payment Method (cash/card/online): ";
                     cin >> payment;
-
                     if (payment == "cash" ||
                         payment == "card" ||
                         payment == "online")
@@ -456,37 +401,29 @@ void FeeReceipt::updatePayment()
                     }
                     break;
                 }
-
                 case 6:
                     cout << "Enter new Remarks: ";
                     cin.ignore();
                     getline(cin, remarks);
                     changed = true;
                     break;
-
                 case 7:
                     cout << "\nEditing completed.\n";
                     break;
-
                 case 8:
                     cancelled = true;
                     cout << "\nAll changes cancelled.\n";
                     break;
-
                 default:
                     cout << "< Invalid choice >" << endl;
                 }
-
             } while (choice != 7 && choice != 8);
-
             if (changed && !cancelled)
             {
                 char confirm;
-
                 cout << "\nAre you sure you want to save "
                      << "these changes? (Y/N): ";
                 cin >> confirm;
-
                 if (confirm != 'Y' && confirm != 'y')
                 {
                     cancelled = true;
@@ -494,38 +431,30 @@ void FeeReceipt::updatePayment()
                 }
             }
         }
-
         tempFile << receiptNo << " " << studentID << " " << amountPaid << " " << paydate << " " << paymentMethod << " " << remarks << endl;
     }
     file.close();
     tempFile.close();
-
     if (!found)
     {
         remove("temp.txt");
         cout << "\n< ERROR: Receipt not found >" << endl;
         return;
     }
-
     if (cancelled || !changed)
     {
         remove("temp.txt");
-
         if (!cancelled)
             cout << "\n< No changes made >" << endl;
-
         return;
     }
-
     remove("payment_backup.txt");
-
     if (rename("payment.txt", "payment_backup.txt") != 0)
     {
         remove("temp.txt");
         cout << "\n< ERROR: Unable to back up payment file >" << endl;
         return;
     }
-
     if (rename("temp.txt", "payment.txt") == 0)
     {
         remove("payment_backup.txt");
@@ -541,7 +470,6 @@ void FeeReceipt::updatePayment()
         {
             cout << "\n< ERROR: Restore payment_backup.txt manually >" << endl;
         }
-
         remove("temp.txt");
         return;
     }
@@ -551,10 +479,8 @@ void FeeReceipt::deletePayment()
 {
     int deleteReceipt;
     bool found = false;
-
     cout << "Enter Receipt Number to Delete: ";
     cin >> deleteReceipt;
-
     if (cin.fail())
     {
         cout << "\n< ERROR: Receipt Number must be an integer >" << endl;
@@ -563,14 +489,12 @@ void FeeReceipt::deletePayment()
         return;
     }
     cin.ignore();
-
     ifstream file("payment.txt");
     if (!file)
     {
         cout << "\n< ERROR: Unable to open payment file >" << endl;
         return;
     }
-
     ofstream tempFile("temp.txt");
     if (!tempFile)
     {
@@ -578,12 +502,10 @@ void FeeReceipt::deletePayment()
         file.close();
         return;
     }
-
     while (file >> receiptNo >> studentID >> amountPaid >> paydate >> paymentMethod)
     {
         file.ignore();
         getline(file, remarks);
-
         if (receiptNo == deleteReceipt)
         {
             cout << "\n------ RECEIPT DETAILS ------\n";
@@ -593,14 +515,11 @@ void FeeReceipt::deletePayment()
             cout << "Payment Date: " << paydate << endl;
             cout << "Payment Method: " << paymentMethod << endl;
             cout << "Remarks: " << remarks << endl;
-
             char confirm;
-
             while (true)
             {
                 cout << "\nAre you sure you want to delete this receipt? (Y/N): ";
                 cin >> confirm;
-
                 if (confirm == 'Y' || confirm == 'y')
                 {
                     found = true;
@@ -620,10 +539,8 @@ void FeeReceipt::deletePayment()
                     cin.ignore(1000, '\n');
                 }
             }
-
             continue;
         }
-
         tempFile << receiptNo << " "
                  << studentID << " "
                  << amountPaid << " "
@@ -631,10 +548,8 @@ void FeeReceipt::deletePayment()
                  << paymentMethod << " "
                  << remarks << endl;
     }
-
     file.close();
     tempFile.close();
-
     if (!found)
     {
         remove("temp.txt");
@@ -642,14 +557,12 @@ void FeeReceipt::deletePayment()
         return;
     }
     remove("payment_backup.txt");
-
     if (rename("payment.txt", "payment_backup.txt") != 0)
     {
         remove("temp.txt");
         cout << "\n< ERROR: Unable to back up payment file >" << endl;
         return;
     }
-
     if (rename("temp.txt", "payment.txt") == 0)
     {
         remove("payment_backup.txt");
@@ -665,7 +578,6 @@ void FeeReceipt::deletePayment()
         {
             cout << "\n< ERROR: Restore payment_backup.txt manually >" << endl;
         }
-
         remove("temp.txt");
         return;
     }
