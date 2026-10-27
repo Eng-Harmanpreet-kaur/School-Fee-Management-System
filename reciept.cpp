@@ -13,6 +13,7 @@ private:
     string paydate;
     string paymentMethod;
     string remarks;
+
 public:
     void recordPayment();
     void displayReceipt();
@@ -47,13 +48,16 @@ void FeeReceipt::recordPayment()
     }
     cin.ignore();
     ifstream f2("payment.dat");
-    if(!f2){
-        cout<<"< Error Opening File >\n";
+    if (!f2)
+    {
+        cout << "< Error Opening File >\n";
         return;
     }
-    if (f2) {
+    if (f2)
+    {
         cout << "\nReading Existing Data..." << endl;
-        while (f2 >> temp.receiptNo >> temp.studentID >> temp.amountPaid >> temp.paydate >> temp.paymentMethod){
+        while (f2 >> temp.receiptNo >> temp.studentID >> temp.amountPaid >> temp.paydate >> temp.paymentMethod)
+        {
             getline(f2, temp.remarks);
             if (ex_rec == temp.receiptNo || stuID == temp.studentID)
             {
@@ -65,7 +69,8 @@ void FeeReceipt::recordPayment()
         f2.close();
     }
     fstream f("payment.dat", ios::app);
-    if (!f){
+    if (!f)
+    {
         cout << "< Error with File Opening >\n";
         return;
     }
@@ -117,14 +122,17 @@ void FeeReceipt::recordPayment()
     cout << "---------------------------\n";
     cout << "Are you sure to add this info (Y/N): ";
     cin >> confirm;
-    if (confirm == 'Y' || confirm == 'y') {
+    if (confirm == 'Y' || confirm == 'y')
+    {
         f << receiptNo << " " << studentID << " " << amountPaid << " " << paydate << " " << paymentMethod << " " << remarks << endl;
         cout << "< Record added Successfully >\n";
     }
-    else if (confirm == 'N' || confirm == 'n'){
+    else if (confirm == 'N' || confirm == 'n')
+    {
         cout << "< Record addition cancelled >\n";
     }
-    else{
+    else
+    {
         cout << "< Invalid Action >\n";
     }
     f.close();
@@ -406,7 +414,7 @@ void FeeReceipt::updatePayment()
             if (changed && !cancelled)
             {
                 char confirm;
-                cout << "\nAre you sure you want to save "<< "these changes? (Y/N): ";
+                cout << "\nAre you sure you want to save " << "these changes? (Y/N): ";
                 cin >> confirm;
                 if (confirm != 'Y' && confirm != 'y')
                 {
@@ -644,7 +652,7 @@ int main()
 {
     system("cls");
     int position;
-    cout << "\n< ---STUDENT MANAGEMENT SYSTEM--->\n" << endl;
+    cout << "\n< ---STUDENT MANAGEMENT SYSTEM--->\n"<< endl;
     cout << "1. Admin\n";
     cout << "2. Student\n";
     cout << "Enter your position: ";
