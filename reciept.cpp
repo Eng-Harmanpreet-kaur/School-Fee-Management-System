@@ -19,11 +19,15 @@ public:
     void updatePayment();
     void deletePayment();
 };
+
 void FeeReceipt::recordPayment()
 {
+    int ex_rec, stuID;
+    char confirm;
+    FeeReceipt temp;
     cout << "\n---------- Record Fee Payment ----------\n";
-    cout << "Enter Receipt Number: ";
-    cin >> receiptNo;
+    cout << "Enter Receipt Number : ";
+    cin >> ex_rec;
     if (cin.fail())
     {
         cout << "\n< ERROR: Receipt Number must be an integer >" << endl;
@@ -32,59 +36,42 @@ void FeeReceipt::recordPayment()
         return;
     }
     cin.ignore();
-    ifstream f1("payment.dat", ios::in | ios::binary);
-    if (f1)
-    {
-        int existingReceipt;
-        int existingStudentID;
-        float existingAmount;
-        string existingDate;
-        string existingMethod;
-        string existingRemarks;
-        while (f1 >> existingReceipt >> existingStudentID >> existingAmount >> existingDate >> existingMethod)
-        {
-            getline(f1, existingRemarks);
-            if (existingReceipt == receiptNo)
-            {
-                cout << "\nERROR: Receipt Number already exists!" << endl;
-                f1.close();
-                return;
-            }
-        }
-        f1.close();
-    }
-    cout << "Enter Student ID: ";
-    cin >> studentID;
+    cout << "Enter student id : ";
+    cin >> stuID;
     if (cin.fail())
     {
-        cout << "\n< ERROR: Student ID must be an integer >" << endl;
+        cout << "\n< ERROR: Student ID must be integer >\n";
         cin.clear();
         cin.ignore(1000, '\n');
         return;
     }
     cin.ignore();
-    ifstream f2("payment.dat", ios::in | ios::binary);
-    if (f2)
-    {
-        int existingReceipt;
-        int existingStudentID;
-        float existingAmount;
-        string existingDate;
-        string existingMethod;
-        string existingRemarks;
-        while (f2 >> existingReceipt >> existingStudentID >> existingAmount >> existingDate >> existingMethod)
-        {
-            getline(f2, existingRemarks);
-            if (existingStudentID == studentID)
+    ifstream f2("payment.dat");
+    if(!f2){
+        cout<<"< Error Opening File >\n";
+        return;
+    }
+    if (f2) {
+        cout << "\nReading Existing Data..." << endl;
+        while (f2 >> temp.receiptNo >> temp.studentID >> temp.amountPaid >> temp.paydate >> temp.paymentMethod){
+            getline(f2, temp.remarks);
+            if (ex_rec == temp.receiptNo || stuID == temp.studentID)
             {
-                cout << "\nERROR: Student ID already exists!" << endl;
-
+                cout << "Payment already exists...\n";
                 f2.close();
                 return;
             }
         }
         f2.close();
     }
+    fstream f("payment.dat", ios::app);
+    if (!f){
+        cout << "< Error with File Opening >\n";
+        return;
+    }
+    cout << "---Enter Student Payment Record ---\n";
+    receiptNo = ex_rec;
+    studentID = stuID;
     cout << "Enter Amount Paid: ";
     cin >> amountPaid;
     if (cin.fail())
@@ -92,6 +79,7 @@ void FeeReceipt::recordPayment()
         cout << "\n< ERROR: Amount Paid must be a number >" << endl;
         cin.clear();
         cin.ignore(1000, '\n');
+        f.close();
         return;
     }
     cin.ignore();
@@ -123,24 +111,23 @@ void FeeReceipt::recordPayment()
     catch (const invalid_argument &e)
     {
         cout << "\n< ERROR: " << e.what() << " >" << endl;
+        f.close();
         return;
     }
-
-    ofstream file("payment.dat", ios::out | ios::app | ios::binary);
-    if (!file)
-    {
-        cout << "\n< ERROR: Unable to open payment file >" << endl;
-        return;
+    cout << "---------------------------\n";
+    cout << "Are you sure to add this info (Y/N): ";
+    cin >> confirm;
+    if (confirm == 'Y' || confirm == 'y') {
+        f << receiptNo << " " << studentID << " " << amountPaid << " " << paydate << " " << paymentMethod << " " << remarks << endl;
+        cout << "< Record added Successfully >\n";
     }
-    file << receiptNo << " ";
-    file << studentID << " ";
-    file << amountPaid << " ";
-    file << paydate << " ";
-    file << paymentMethod << " ";
-    file << remarks << endl;
-    file.close();
-    cout << "\n< Payment recorded successfully >"
-         << endl;
+    else if (confirm == 'N' || confirm == 'n'){
+        cout << "< Record addition cancelled >\n";
+    }
+    else{
+        cout << "< Invalid Action >\n";
+    }
+    f.close();
 }
 
 void FeeReceipt::displayReceipt()
