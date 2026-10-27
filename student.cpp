@@ -20,7 +20,7 @@ public:
     void search();
     void update();
     void del();
-    void display1();
+    void displaystu();
 };
 
 void student::add()
@@ -407,7 +407,7 @@ void student::del()
     }
 }
 
-void student::display1()
+void student::displaystu()
 {
     fstream fs;
     fs.open("student.dat", ios::in | ios::binary);
@@ -517,7 +517,7 @@ void stu()
         switch (choice)
         {
         case 1:
-            s.display1();
+            s.displaystu();
             break;
         case 2:
             s.search();
